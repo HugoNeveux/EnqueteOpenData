@@ -7,7 +7,7 @@ from cartographie import *
 
 
 class Suspect:
-    def __init__(self, nom: str, tweeter_id: int, number: int, twclient: tweepy.Client):
+    def __init__(self, nom: str, tweeter_id: str, number: str, twclient: tweepy.Client):
         """
         Class constructor. Initializes useful class attributes.
         """
