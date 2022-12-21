@@ -39,9 +39,8 @@ def import_suspects(twpclient: tweepy.Client) -> list[Suspect]:
     """
     with open('suspects.csv', 'r', encoding="utf-8") as fich:
         reader = csv.DictReader(fich, delimiter=';')
-        data = [suspect for suspect in reader]
         return [Suspect(pers["PRENOM"], pers["IDENTIFIANT_TWITTER"],
-                        pers["TELEPHONE"], twpclient) for pers in data]
+                        pers["TELEPHONE"], twpclient) for pers in reader]
 
 def plot_map(lst_suspects: list[Suspect]):
     map = creer_carte("Bretagne")
