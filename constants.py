@@ -20,3 +20,7 @@ SUSPECTS_COLORS = {
 
 # URL used to fetch information about antennas
 PHONE_OPERATORS_URL = "http://my-json-server.typicode.com/alemaitr/python_opendata_l2/bornage"
+
+# Source files
+CREDENTIALS_FILE = "credentials.json"
+SUSPECTS_FILE = "suspects.csv"

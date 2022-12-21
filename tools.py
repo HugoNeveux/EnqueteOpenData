@@ -10,7 +10,7 @@ import requests
 import csv
 
 from suspect import Suspect
-from constants import CRIME_DATE, CRIME_LOCATION, PHONE_OPERATORS_URL, SUSPECTS_COLORS
+from constants import *
 from cartography import *
 
 def api_init() -> tuple[tweepy.Client, graphh.GraphHopper]:
@@ -18,7 +18,7 @@ def api_init() -> tuple[tweepy.Client, graphh.GraphHopper]:
     Uses the credentials.json file to intiialize both tweepy and graphhopper 
     clients.
     """
-    with open("credentials.json", "r") as fp:
+    with open(CREDENTIALS_FILE, "r") as fp:
         data = json.load(fp)
     twitter_keys = data["twitter"]
 
@@ -40,7 +40,7 @@ def import_suspects(twpclient: tweepy.Client) -> list[Suspect]:
     Reads the suspects.csv file and initializes a list of suspects using 
     collected data.
     """
-    with open('suspects.csv', 'r', encoding="utf-8") as fich:
+    with open(CREDENTIALS_FILE, 'r', encoding="utf-8") as fich:
         reader = csv.DictReader(fich, delimiter=';')
         return [Suspect(pers["PRENOM"], pers["IDENTIFIANT_TWITTER"],
                         pers["TELEPHONE"], SUSPECTS_COLORS[pers["PRENOM"]],
