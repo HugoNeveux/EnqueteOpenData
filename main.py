@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from tools import *
-from cartographie import *
+from cartography import *
 from geo import *
 
 import argparse as agp

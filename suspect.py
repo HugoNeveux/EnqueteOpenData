@@ -3,7 +3,7 @@ import datetime
 import pytz
 import tweepy
 
-from cartographie import *
+from cartography import *
 from constants import *
 
 class Suspect:

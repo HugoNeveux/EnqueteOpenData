@@ -6,7 +6,7 @@ import csv
 
 from suspect import Suspect
 from constants import PHONE_OPERATORS_URL, SUSPECTS_COLORS
-from cartographie import *
+from cartography import *
 
 def api_init() -> tuple[tweepy.Client, graphh.GraphHopper]:
     """
