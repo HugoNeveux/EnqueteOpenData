@@ -7,7 +7,7 @@ from cartographie import *
 
 
 class Suspect:
-    def __init__(self, nom: str, tweeter_id: str, number: str, twclient: tweepy.Client):
+    def __init__(self, nom: str, tweeter_id: str, number: str, color: str, twclient: tweepy.Client):
         """
         Class constructor. Initializes useful class attributes.
         """
@@ -15,15 +15,22 @@ class Suspect:
         self.tweeter_id = tweeter_id
         self.number = number
         self.client = twclient
-        # On recupère ici id en plus des info dans le csv
+        self.color = color
+        # On recupère ici id en plus des infos dans le csv
         self.user_id = self.client.get_user(
             username=self.tweeter_id, user_auth=True).data.id
         self.loc_history = []
         self.is_suspect = True
 
     def __str__(self):
+        """
+        Used when printing an instance of this class. Shows an output like 
+        Name:
+            date, time: (longitude, latitude) [type: twitter | phone]
+            ...
+        """
         loc_hist_repr = [loc["date"].strftime(
-            "%d/%m/%Y, %H:%M:%S") + f": ({loc['lat']}, {loc['long']}) [type: {loc['type']}]" for loc in self.loc_history]
+            "%d/%m/%Y, %H:%M:%S %Z") + f": ({loc['lat']}, {loc['long']}) [type: {loc['type']}]" for loc in self.loc_history]
         return self.nom + ': \n\t' + '\n\t'.join(loc_hist_repr)
 
     def get_twitter_loc_history(self):
@@ -58,9 +65,16 @@ class Suspect:
                         "type": "phone"
                     })
 
-    def last_known_loc(self):
+    def last_known_loc(self) -> dict:
         """
         Calculates the last known position before or after the crime date.
+        Return a location as a dictionary shaped like
+        {
+            "date": datetime,
+            "lat": latitude (float),
+            "long": longitude (float),
+            "type": "phone" | "twitter"
+        }
         """
         date_crime = datetime.datetime(
             2022, 11, 28, 15, 5).astimezone(pytz.timezone("Europe/Paris"))
@@ -68,7 +82,7 @@ class Suspect:
         location = self.loc_history[0] 
 
         for dict_loc in self.loc_history:
-            date, *latlong, _ = dict_loc.values()
+            date, *_ = dict_loc.values()
             interval = abs(date_crime - date)
             if interval < interval_min:
                 interval_min = interval
@@ -76,6 +90,9 @@ class Suspect:
         return location 
 
     def draw_loc_history(self, map):
+        """
+        Draws the suspect's localization history on a map
+        """
         lst_lat = [loc["lat"] for loc in self.loc_history]
         lst_long = [loc["long"] for loc in self.loc_history]
-        tracer_ligne(map, lst_long, lst_lat, self.nom)
+        tracer_ligne(map, lst_long, lst_lat, self.nom, self.color)

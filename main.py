@@ -9,6 +9,13 @@ from cartographie import *
 from geo import *
 from suspect import Suspect
 
+SUSPECTS_COLORS = {
+    "Jean-Michel": "purple",
+    "Georges": "green",
+    "Robert": "blue",
+    "Christiane": "red"
+}
+
 
 def api_init() -> tuple[tweepy.Client, graphh.GraphHopper]:
     """
@@ -40,7 +47,8 @@ def import_suspects(twpclient: tweepy.Client) -> list[Suspect]:
     with open('suspects.csv', 'r', encoding="utf-8") as fich:
         reader = csv.DictReader(fich, delimiter=';')
         return [Suspect(pers["PRENOM"], pers["IDENTIFIANT_TWITTER"],
-                        pers["TELEPHONE"], twpclient) for pers in reader]
+                        pers["TELEPHONE"], SUSPECTS_COLORS[pers["PRENOM"]],
+                        twpclient) for pers in reader]
 
 def plot_map(lst_suspects: list[Suspect]):
     map = creer_carte("Bretagne")
