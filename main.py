@@ -69,5 +69,3 @@ if __name__ == "__main__":
     if args.show_map:
         verboseprint("Displaying map...")
         plot_map(lst_suspects)
-
-

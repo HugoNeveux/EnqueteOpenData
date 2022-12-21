@@ -45,10 +45,10 @@ def plot_map(lst_suspects: list[Suspect]):
     """
     Plots the map displaying all registered locations for each suspect.
     """
-    map = creer_carte("Bretagne")
+    map = create_map("Bretagne")
     for s in lst_suspects:
         s.draw_loc_history(map)
-    afficher_carte(map)
+    show_map(map)
 
 
 def get_provider_data() -> dict:

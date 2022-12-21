@@ -141,10 +141,10 @@ class Suspect:
         for loc in self.loc_history:
             if loc["date"] > CRIME_DAY_BEGIN and loc["date"] < CRIME_DAY_END:
                 hour = loc["date"].strftime(format)
-                tracer_point(map, loc["long"], loc["lat"], hour, self.color)
+                plot_point(map, loc["long"], loc["lat"], hour, self.color)
                 lst_lat.append(loc["lat"])
                 lst_long.append(loc["long"])
-        tracer_ligne(map, lst_long, lst_lat, self.name, self.color)
+        plot_line(map, lst_long, lst_lat, self.name, self.color)
 
         # Crime location point
-        tracer_point(map, CRIME_LOCATION[1], CRIME_LOCATION[0], "Crime location at 15h05", "yellow")
+        plot_point(map, CRIME_LOCATION[1], CRIME_LOCATION[0], "Crime location at 15h05", "yellow")
