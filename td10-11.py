@@ -59,10 +59,13 @@ if __name__ == "__main__":
     for person in lst_suspects:
         if person.is_suspect:
             print('=' * 74)
-            print("There is only one suspect remaining, so the murderer is ... " 
+            print("There is only one suspect remaining, so the culprit is ... " 
                   "(rolling drum)")
             print(f"{person.name} !!!!!!")
             print('=' * 74)
+
+            # Add the UFR's location to the culprit's path - because we now 
+            # know he was there on 15:05...
             person.loc_history.append({
                     "date": CRIME_DATE,
                     "lat": CRIME_LOCATION[0],
@@ -71,6 +74,7 @@ if __name__ == "__main__":
                 })
             person.sort_loc_history()
     
+    # Display a map if the user chose to do so
     if args.show_map:
         verboseprint("Displaying map...")
         plot_map(lst_suspects)
