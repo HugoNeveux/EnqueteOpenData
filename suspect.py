@@ -65,18 +65,15 @@ class Suspect:
         date_crime = datetime.datetime(
             2022, 11, 28, 15, 5).astimezone(pytz.timezone("Europe/Paris"))
         interval_min = abs(date_crime - self.loc_history[0]["date"])
-        last_loc = (self.loc_history[0]
-                    ["lat"], self.loc_history[0]["long"])
-        loc_date = self.loc_history[0]["date"]
+        location = self.loc_history[0] 
 
         for dict_loc in self.loc_history:
             date, *latlong, _ = dict_loc.values()
             interval = abs(date_crime - date)
             if interval < interval_min:
                 interval_min = interval
-                last_loc = latlong
-                loc_date = date
-        return (loc_date, last_loc)
+                location = dict_loc
+        return location 
 
     def draw_loc_history(self, map):
         lst_lat = [loc["lat"] for loc in self.loc_history]
