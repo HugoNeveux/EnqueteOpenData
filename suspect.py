@@ -4,7 +4,7 @@ import pytz
 import tweepy
 
 from cartographie import *
-from constants import CRIME_DATE
+from constants import CRIME_DATE, CRIME_LOCATION
 
 class Suspect:
     def __init__(self, name: str, twitter_username: str, phone_number: str, color: str, twclient: tweepy.Client):
@@ -133,18 +133,22 @@ class Suspect:
         """
         Draws the suspect's localization history on a map
         """
-        lst_lat = [loc["lat"] for loc in self.loc_history if loc["date"] > datetime.datetime(2022, 11, 28, 00, 00).astimezone(pytz.timezone("Europe/Paris")) and loc["date"] < datetime.datetime(2022, 11, 28, 23, 59).astimezone(pytz.timezone("Europe/Paris"))]
-        lst_long = [loc["long"] for loc in self.loc_history if loc["date"] > datetime.datetime(2022, 11, 28, 00, 00).astimezone(pytz.timezone("Europe/Paris")) and loc["date"] < datetime.datetime(2022, 11, 28, 23, 59).astimezone(pytz.timezone("Europe/Paris"))]
+        lst_lat = []
+        lst_long = []
+
+        format = "%Hh:%Mm:%Ss"
+        # Tracing the map only for the 28/11/2022
+        for loc in self.loc_history:
+            if loc["date"] > datetime.datetime(2022, 11, 28, 00, 00).astimezone(pytz.timezone("Europe/Paris")) and loc["date"] < datetime.datetime(2022, 11, 28, 23, 59).astimezone(pytz.timezone("Europe/Paris")):
+                hour = loc["date"].strftime(format)
+                tracer_point(map, loc["long"], loc["lat"], hour, self.color)
+                lst_lat.append(loc["lat"])
+                lst_long.append(loc["long"])
         tracer_ligne(map, lst_long, lst_lat, self.name, self.color)
 
-        """
-        Draw the point
-        """
-        #format = "%Hh:%Mmin"
-        for loc in self.loc_history:
-            if loc["date"] > datetime.datetime(2022, 11, 28, 00, 00).astimezone(pytz.timezone("Europe/Paris")) and loc["date"] < datetime.datetime(2022, 11, 28, 23, 59).astimezone(pytz.timezone("Europe/Paris")): 
-                heure = str(loc["date"])
-                tracer_point(map, loc["long"], loc["lat"], heure, self.color)
+        # Point de l'UFR
+        tracer_point(map, CRIME_LOCATION[1], CRIME_LOCATION[0], "Crime location at 15h05", "yellow")
+
 
 
 # if loc["date"] > datetime.datetime(2022, 11, 28, 00) and loc["date"] < datetime.datetime(2022, 11, 28, 23, 59)

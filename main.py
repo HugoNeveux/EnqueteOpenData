@@ -9,6 +9,8 @@ from cartographie import *
 from geo import *
 from suspect import Suspect
 
+from constants import CRIME_LOCATION, CRIME_DATE
+
 SUSPECTS_COLORS = {
     "Jean-Michel": "purple",
     "Georges": "green",
@@ -55,7 +57,7 @@ def plot_map(lst_suspects: list[Suspect]):
     """
     Plots the map displaying all registered locations for each suspect.
     """
-    map = creer_carte("Bretagne")
+    map = creer_carte("Parcour des différents suspects le 28/11/2022")
     for s in lst_suspects:
         s.draw_loc_history(map)
     afficher_carte(map)
@@ -78,22 +80,30 @@ if __name__ == "__main__":
     # recuperation des localisation par le téléphone
     phone_loc_history = get_provider_data()
 
-    # # permet d'innocenter jean mi et george
+    # permet d'innocenter jean mi et george
     for person in lst_suspect:
         person.get_twitter_loc_history()
         person.get_phone_loc_history(phone_loc_history)
-    #     dico = person.last_known_loc()
-    #     temps_to_UFR(ghclient, dico, person)
+        dico = person.last_known_loc()
+        temps_to_UFR(ghclient, dico, person)
 
-    # # permet d'innocenter christiane
-    # for person in lst_suspect:
-    #     if person.is_suspect:
-    #         dico = person.first_known_loc()
-    #         temps_to_UFR(ghclient, dico, person)
+    # permet d'innocenter christiane
+    for person in lst_suspect:
+        if person.is_suspect:
+            dico = person.first_known_loc()
+            temps_to_UFR(ghclient, dico, person)
 
-    # for person in lst_suspect:
-    #     if person.is_suspect:
-    #         print(f'Le meurtrier est donc : {person.name}')
+    for person in lst_suspect:
+        if person.is_suspect:
+            print(f'Le meurtrier est donc : {person.name}')
+            person.loc_history.append({
+                    "date": CRIME_DATE,
+                    "lat": CRIME_LOCATION[0],
+                    "long": CRIME_LOCATION[1],
+                    "type": None
+                })
+            person.sort_loc_history()
+
 
     # dessine la map
     plot_map(lst_suspect)
