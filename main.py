@@ -105,5 +105,5 @@ if __name__ == "__main__":
             person.sort_loc_history()
 
 
-    # dessine la map
+    # Draw the map
     plot_map(lst_suspect)
