@@ -1,4 +1,6 @@
-#!/usr/bin/python3
+# 22101722 Florent Cheyron <florent.cheyron@etudiant.univ-rennes2.fr>
+# 22107583 Hugo Neveux <hugo.neveux@etudiant.univ-rennes2.fr>
+# File td10-11.py, december 2022
 
 from tools import *
 from cartography import *
