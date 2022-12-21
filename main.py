@@ -1,5 +1,4 @@
 import csv
-import datetime
 import json
 
 import requests
@@ -13,8 +12,8 @@ from suspect import Suspect
 SUSPECTS_COLORS = {
     "Jean-Michel": "purple",
     "Georges": "green",
-    "Robert": "blue",
-    "Christiane": "red"
+    "Robert": "red",
+    "Christiane": "blue"
 }
 
 def api_init() -> tuple[tweepy.Client, graphh.GraphHopper]:
@@ -70,14 +69,31 @@ def get_provider_data() -> dict:
 
 
 if __name__ == "__main__":
+    # Création des clients graphh et tweepy, de la liste des suspects
     twclient, ghclient = api_init()
     lst_suspect = import_suspects(twclient)
+
+    # recuperation des localisation par le téléphone
     phone_loc_history = get_provider_data()
 
+    # permet d'innocenter jean mi et george
     for person in lst_suspect:
         person.get_twitter_loc_history()
         person.get_phone_loc_history(phone_loc_history)
-        print(person)
-        print(person.last_known_loc())
-        print(person.first_known_loc())
-    plot_map(lst_suspect)
+        dico = person.last_known_loc()
+        temps_to_UFR(ghclient, dico, person)
+
+    # permet d'innocenter christiane
+    for person in lst_suspect :
+        if person.is_suspect:
+            dico = person.first_known_loc()
+            temps_to_UFR(ghclient, dico, person)
+
+    for person in lst_suspect :
+        if person.is_suspect:
+            print(f'Le meurtrier est donc : {person.name}')
+
+    
+
+    # dessine la map
+    # plot_map(lst_suspect)
