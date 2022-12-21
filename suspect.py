@@ -4,9 +4,7 @@ import pytz
 import tweepy
 
 from cartographie import *
-
-CRIME_DATE = datetime.datetime(
-            2022, 11, 28, 15, 5).astimezone(pytz.timezone("Europe/Paris"))
+from constants import CRIME_DATE
 
 class Suspect:
     def __init__(self, name: str, twitter_username: str, phone_number: str, color: str, twclient: tweepy.Client):
@@ -93,7 +91,7 @@ class Suspect:
         """
         Calculates the last known position before the crime date.
         Returns a location as a dictionary shaped like
-        
+
         {
             "date": datetime,
             "lat": latitude (float),
