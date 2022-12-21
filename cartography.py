@@ -12,7 +12,7 @@ def coor_wgs84_to_web_mercator(lon, lat):
     """
     Converts decimal longitude/latitude to Web Mercator format
     """
-    k = 6378137
+    k = 6_378_137
     x = lon * (k * np.pi/180.0)
     y = np.log(np.tan((90 + lat) * np.pi/360.0)) * k
     return (x,y)
