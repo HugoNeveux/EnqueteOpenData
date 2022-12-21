@@ -22,12 +22,12 @@ def api_init() -> tuple[tweepy.Client, graphh.GraphHopper]:
     # Twitter client
     client_tw = tweepy.Client(
         consumer_key=twitter_keys["CONSUMER_KEY"],
-        consumer_secret=twitter_keys["CONSUMER_KEY_SECRET"],
+        consumer_secret=twitter_keys["CONSUMER_SECRET"],
         access_token=twitter_keys["ACCESS_TOKEN"],
         access_token_secret=twitter_keys["ACCESS_TOKEN_SECRET"])
 
     # GraphHopper client
-    client_gh = graphh.GraphHopper(api_key=data["GraphHopper"]["GraphHopper"])
+    client_gh = graphh.GraphHopper(api_key=data["graphhopper"])
     
     return client_tw, client_gh
 
@@ -40,7 +40,6 @@ def import_suspects(twpclient: tweepy.Client) -> list[Suspect]:
     with open('suspects.csv', 'r', encoding="utf-8") as fich:
         reader = csv.DictReader(fich, delimiter=';')
         data = [suspect for suspect in reader]
-        print(data)
         return [Suspect(pers["PRENOM"], pers["IDENTIFIANT_TWITTER"],
                         pers["TELEPHONE"], twpclient) for pers in data]
 
