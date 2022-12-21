@@ -2,7 +2,6 @@
 
 from tools import *
 from cartography import *
-from geo import *
 
 import argparse as agp
 
