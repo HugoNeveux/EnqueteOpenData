@@ -70,8 +70,8 @@ class Suspect:
         loc_date = self.loc_history[0]["date"]
 
         for dict_loc in self.loc_history:
-            date, *latlong = dict_loc.values()
-            interval = abs(date_crime - loc_date)
+            date, *latlong, _ = dict_loc.values()
+            interval = abs(date_crime - date)
             if interval < interval_min:
                 interval_min = interval
                 last_loc = latlong
