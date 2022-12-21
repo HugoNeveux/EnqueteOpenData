@@ -4,7 +4,7 @@ import pytz
 import tweepy
 
 from cartographie import *
-from constants import CRIME_DATE
+from constants import *
 
 class Suspect:
     def __init__(self, name: str, twitter_username: str, phone_number: str, color: str, twclient: tweepy.Client):
@@ -50,7 +50,7 @@ class Suspect:
         their location history.
         """
         response = self.client.get_users_tweets(
-            self.user_id, user_auth=True, max_results=20, tweet_fields=["created_at", "geo"])
+            self.user_id, user_auth=True, max_results=20, tweet_fields=["created_at", "geo"], start_time = CRIME_DAY_BEGIN, end_time = CRIME_DAY_END)
         for tweet in response.data:
             if tweet.geo and tweet.geo.get('coordinates'):
                 self.loc_history.append({
@@ -133,6 +133,18 @@ class Suspect:
         """
         Draws the suspect's localization history on a map
         """
-        lst_lat = [loc["lat"] for loc in self.loc_history]
-        lst_long = [loc["long"] for loc in self.loc_history]
+        lst_lat = []
+        lst_long = []
+
+        format = "%Hh:%Mm:%Ss"
+        # Tracing the map only for the 28/11/2022
+        for loc in self.loc_history:
+            if loc["date"] > CRIME_DAY_BEGIN and loc["date"] < CRIME_DAY_END:
+                hour = loc["date"].strftime(format)
+                tracer_point(map, loc["long"], loc["lat"], hour, self.color)
+                lst_lat.append(loc["lat"])
+                lst_long.append(loc["long"])
         tracer_ligne(map, lst_long, lst_lat, self.name, self.color)
+
+        # Crime location point
+        tracer_point(map, CRIME_LOCATION[1], CRIME_LOCATION[0], "Crime location at 15h05", "yellow")

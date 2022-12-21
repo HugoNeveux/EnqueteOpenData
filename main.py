@@ -58,7 +58,16 @@ if __name__ == "__main__":
     for person in lst_suspects:
         if person.is_suspect:
             print(f'The murderer is {person.name}')
+            person.loc_history.append({
+                    "date": CRIME_DATE,
+                    "lat": CRIME_LOCATION[0],
+                    "long": CRIME_LOCATION[1],
+                    "type": None
+                })
+            person.sort_loc_history()
     
     if args.show_map:
         verboseprint("Displaying map...")
         plot_map(lst_suspects)
+
+
