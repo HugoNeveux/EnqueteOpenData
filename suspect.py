@@ -1,5 +1,8 @@
-import datetime
+# 22101722 Florent Cheyron <florent.cheyron@etudiant.univ-rennes2.fr>
+# 22107583 Hugo Neveux <hugo.neveux@etudiant.univ-rennes2.fr>
+# File suspect.py, december 2022
 
+import datetime
 import pytz
 import tweepy
 
