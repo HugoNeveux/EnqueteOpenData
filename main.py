@@ -12,6 +12,10 @@ if __name__ == "__main__":
     parser.add_argument("--verbose", "-v", action="store_true", default=False,
                         help="Display more information when running the"
                              " program.")
+    parser.add_argument("--show-paths", action="store_true", default=False,
+                        help="Print each position (as a couple of coords)"
+                             " for each suspect, with information on the"
+                             " time and the source of this location.")
     
     
     args = parser.parse_args()
@@ -24,7 +28,7 @@ if __name__ == "__main__":
     verboseprint("Initializing clients...")
     twclient, ghclient = api_init()
     lst_suspects = import_suspects(twclient)
-    verboseprint("Complete")
+    verboseprint("Complete.")
 
     # Fetch data from phone antennas
     verboseprint("Fetching phone location data...")
@@ -36,7 +40,10 @@ if __name__ == "__main__":
         # Build the suspect's location history
         person.get_twitter_loc_history()
         person.get_phone_loc_history(phone_loc_history)
-        verboseprint(f"Building complete.")
+        verboseprint(f"Complete.")
+
+        if args.show_paths:
+            print(person)
 
         # First attempt to innocent the suspect, using their last known 
         # location *before* the crime
