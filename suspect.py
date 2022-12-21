@@ -23,7 +23,7 @@ class Suspect:
 
     def __str__(self):
         loc_hist_repr = [loc["date"].strftime(
-            "%d/%m/%Y, %H:%M:%S") + f": ({loc['lat']}, {loc['long']})" for loc in self.loc_history]
+            "%d/%m/%Y, %H:%M:%S") + f": ({loc['lat']}, {loc['long']}) [type: {loc['type']}]" for loc in self.loc_history]
         return self.nom + ': \n\t' + '\n\t'.join(loc_hist_repr)
 
     def get_twitter_loc_history(self):
@@ -36,9 +36,10 @@ class Suspect:
         for tweet in response.data:
             if tweet.geo and tweet.geo.get('coordinates'):
                 self.loc_history.append({
-                    'date': tweet.created_at.astimezone(pytz.timezone("Europe/Paris")),
-                    'lat': tweet.geo['coordinates']['coordinates'][1],
-                    'long': tweet.geo['coordinates']['coordinates'][0]
+                    "date": tweet.created_at.astimezone(pytz.timezone("Europe/Paris")),
+                    "lat": tweet.geo["coordinates"]["coordinates"][1],
+                    "long": tweet.geo["coordinates"]["coordinates"][0],
+                    "type": "twitter"
                 })
 
     def get_phone_loc_history(self, donnees_bornage: dict):
@@ -53,7 +54,8 @@ class Suspect:
                     self.loc_history.append({
                         "date": dt_date.astimezone(pytz.timezone("Europe/Paris")),
                         "lat": antenne["localisation"]["lat"],
-                        "long": antenne["localisation"]["long"]
+                        "long": antenne["localisation"]["long"],
+                        "type": "phone"
                     })
 
     def last_known_loc(self):
@@ -61,7 +63,7 @@ class Suspect:
         Calculates the last known position before or after the crime date.
         """
         date_crime = datetime.datetime(
-            2022, 11, 28, 15, 5).astimezone(pytz.timzeone("Europe/Paris"))
+            2022, 11, 28, 15, 5).astimezone(pytz.timezone("Europe/Paris"))
         interval_min = abs(date_crime - self.loc_history[0]["date"])
         last_loc = (self.loc_history[0]
                     ["lat"], self.loc_history[0]["long"])
