@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 from tools import *
 from cartographie import *
 from geo import *
@@ -16,7 +18,6 @@ if __name__ == "__main__":
                         help="Print each position (as a couple of coords)"
                              " for each suspect, with information on the"
                              " time and the source of this location.")
-    
     
     args = parser.parse_args()
 
@@ -53,9 +54,6 @@ if __name__ == "__main__":
         # *after* the crime
         if person.is_suspect:
             innocent_suspect(ghclient, person.first_known_loc(), person)
-        
-        if not person.is_suspect:
-            verboseprint(f"{person.name} was innocented !")
         
     for person in lst_suspects:
         if person.is_suspect:

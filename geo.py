@@ -6,6 +6,7 @@ def innocent_suspect(ghclient, dict_loc: dict, suspect):
     Innocents the suspect if they can't make it beetween their location and
     the crime scene 
     """
+    time_format = "%Hh and %M minutes" 
     location = [dict_loc['lat'], dict_loc['long']]
     time = dict_loc['date']
 
@@ -20,4 +21,10 @@ def innocent_suspect(ghclient, dict_loc: dict, suspect):
 
     if available_time < duration_to_crime_scene:
         # Innocenting the suspect
+        print(f"{suspect.name} : the suspect's last registered location is on " 
+              f"{time.strftime(time_format)}. It is "
+              f"{(available_time/datetime.timedelta(minutes=1)):.2f} minutes "
+               "apart from the crime date and time, and they would need "
+              f"{(duration_to_crime_scene.seconds)/60:.2f} minutes to get "
+              f"there. Therefore, {suspect.name} is innocent.")
         suspect.is_suspect = False
