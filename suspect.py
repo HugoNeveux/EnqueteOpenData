@@ -5,28 +5,38 @@ import tweepy
 
 from cartographie import *
 
-DATE_CRIME = datetime.datetime(
+CRIME_DATE = datetime.datetime(
             2022, 11, 28, 15, 5).astimezone(pytz.timezone("Europe/Paris"))
 
 class Suspect:
-    def __init__(self, nom: str, tweeter_id: str, number: str, color: str, twclient: tweepy.Client):
+    def __init__(self, name: str, twitter_username: str, phone_number: str, color: str, twclient: tweepy.Client):
         """
-        Class constructor. Initializes useful class attributes.
+        Class constructor. Initializes useful class attributes and gets the suspect's twitter id.
+
+        name: The suspect's name
+        twitter_username: The suspect's twitter account @
+        phone_number: The suspect's phone number
+        color: The suspect's color, used to draw their successive locations on a map
+        twclient: A tweepy client object, used to get tweets written by the suspect, and their geolocalizations
         """
-        self.nom = nom
-        self.tweeter_id = tweeter_id
-        self.number = number
+        self.name = name
+        self.number = phone_number
         self.client = twclient
         self.color = color
-        # On recupère ici id en plus des infos dans le csv
+
+        # Get the suspect's twitter id
         self.user_id = self.client.get_user(
-            username=self.tweeter_id, user_auth=True).data.id
+            username=twitter_username, user_auth=True).data.id
+        
+        # Initialize the location history
         self.loc_history = []
+        # By default, everyone is a suspect
         self.is_suspect = True
 
     def __str__(self):
         """
         Used when printing an instance of this class. Shows an output like 
+
         Name:
             date, time: (longitude, latitude) [type: twitter | phone]
             ...
@@ -34,7 +44,7 @@ class Suspect:
         loc_hist_repr = [loc["date"].strftime("%d/%m/%Y, %H:%M:%S %Z") 
                          + f": ({loc['lat']}, {loc['long']}) [type: {loc['type']}]" 
                          for loc in self.loc_history]
-        return self.nom + ': \n\t' + '\n\t'.join(loc_hist_repr)
+        return self.name + ': \n\t' + '\n\t'.join(loc_hist_repr)
 
     def get_twitter_loc_history(self):
         """
@@ -83,6 +93,7 @@ class Suspect:
         """
         Calculates the last known position before the crime date.
         Returns a location as a dictionary shaped like
+        
         {
             "date": datetime,
             "lat": latitude (float),
@@ -93,11 +104,11 @@ class Suspect:
         # loc_history is a sorted list : the first registered location is 
         # before the crime date
         location = self.loc_history[0] 
-        interval_min = DATE_CRIME - location["date"]
+        interval_min = CRIME_DATE - location["date"]
 
         for dict_loc in self.loc_history:
             date = dict_loc["date"]
-            interval = DATE_CRIME - date
+            interval = CRIME_DATE - date
             if interval <= interval_min and interval > datetime.timedelta(0, 0, 0):
                 interval_min = interval
                 location = dict_loc
@@ -109,11 +120,11 @@ class Suspect:
         Returns a location as a dictionnary, like the function above.
         """
         location = self.loc_history[-1]
-        interval_min = location["date"] - DATE_CRIME
+        interval_min = location["date"] - CRIME_DATE
 
         for dict_loc in self.loc_history:
             date = dict_loc["date"]
-            interval = date - DATE_CRIME
+            interval = date - CRIME_DATE
             if interval <= interval_min and interval > datetime.timedelta(0, 0, 0):
                 interval_min = interval 
                 location = dict_loc 
@@ -126,4 +137,4 @@ class Suspect:
         """
         lst_lat = [loc["lat"] for loc in self.loc_history]
         lst_long = [loc["long"] for loc in self.loc_history]
-        tracer_ligne(map, lst_long, lst_lat, self.nom, self.color)
+        tracer_ligne(map, lst_long, lst_lat, self.name, self.color)

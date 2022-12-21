@@ -50,6 +50,9 @@ def import_suspects(twpclient: tweepy.Client) -> list[Suspect]:
                         twpclient) for pers in reader]
 
 def plot_map(lst_suspects: list[Suspect]):
+    """
+    Plots the map displaying all registered locations for each suspect.
+    """
     map = creer_carte("Bretagne")
     for s in lst_suspects:
         s.draw_loc_history(map)
@@ -57,6 +60,10 @@ def plot_map(lst_suspects: list[Suspect]):
 
 
 def get_provider_data() -> dict:
+    """
+    Fetches the json file containing data about antennas and the location of
+    each suspect's phone. 
+    """
     return requests.get(
         "http://my-json-server.typicode.com/alemaitr/python_opendata_l2/bornage").json()
 
