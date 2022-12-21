@@ -58,7 +58,11 @@ if __name__ == "__main__":
         
     for person in lst_suspects:
         if person.is_suspect:
-            print(f'The murderer is {person.name}')
+            print('=' * 74)
+            print("There is only one suspect remaining, so the murderer is ... " 
+                  "(rolling drum)")
+            print(f"{person.name} !!!!!!")
+            print('=' * 74)
             person.loc_history.append({
                     "date": CRIME_DATE,
                     "lat": CRIME_LOCATION[0],

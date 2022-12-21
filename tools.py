@@ -40,7 +40,7 @@ def import_suspects(twpclient: tweepy.Client) -> list[Suspect]:
     Reads the suspects.csv file and initializes a list of suspects using 
     collected data.
     """
-    with open(CREDENTIALS_FILE, 'r', encoding="utf-8") as fich:
+    with open(SUSPECTS_FILE, 'r', encoding="utf-8") as fich:
         reader = csv.DictReader(fich, delimiter=';')
         return [Suspect(pers["PRENOM"], pers["IDENTIFIANT_TWITTER"],
                         pers["TELEPHONE"], SUSPECTS_COLORS[pers["PRENOM"]],

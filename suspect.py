@@ -34,6 +34,7 @@ class Suspect:
         # By default, everyone is a suspect
         self.is_suspect = True
 
+
     def __str__(self):
         """
         Used when printing an instance of this class. Shows an output like 
@@ -47,13 +48,17 @@ class Suspect:
                          for loc in self.loc_history]
         return self.name + ': \n\t' + '\n\t'.join(loc_hist_repr)
 
+
     def get_twitter_loc_history(self):
         """
         Gets the suspect's location history from their tweets and adds it to 
         their location history.
         """
         response = self.client.get_users_tweets(
-            self.user_id, user_auth=True, max_results=20, tweet_fields=["created_at", "geo"], start_time = CRIME_DAY_BEGIN, end_time = CRIME_DAY_END)
+            self.user_id, user_auth=True, max_results=20, 
+            tweet_fields=["created_at", "geo"], start_time = CRIME_DAY_BEGIN, 
+            end_time = CRIME_DAY_END)
+
         for tweet in response.data:
             if tweet.geo and tweet.geo.get('coordinates'):
                 self.loc_history.append({
@@ -62,7 +67,10 @@ class Suspect:
                     "long": tweet.geo["coordinates"]["coordinates"][0],
                     "type": "twitter"
                 })
+
+        # Ensure loc_history is a sorted list
         self.sort_loc_history()
+
 
     def get_phone_loc_history(self, donnees_bornage: dict):
         """
@@ -79,7 +87,10 @@ class Suspect:
                         "long": antenne["localisation"]["long"],
                         "type": "phone"
                     })
+        
+        # Ensore loc_history is a sorted list
         self.sort_loc_history()
+
 
     def sort_loc_history(self):
         """
@@ -89,6 +100,7 @@ class Suspect:
         history is always sorted
         """
         self.loc_history.sort(key=lambda loc: loc["date"])
+
 
     def last_known_loc(self) -> dict:
         """
@@ -115,6 +127,7 @@ class Suspect:
                 location = dict_loc
         return location
 
+
     def first_known_loc(self) -> dict:
         """
         Calculates the first known position after the crime date.
@@ -134,16 +147,19 @@ class Suspect:
 
     def draw_loc_history(self, map):
         """
-        Draws the suspect's localization history on a map
+        Draws the suspect's localization history on a map. 
+        Dots represent the suspect's known location at a time, and lines are
+        the suspect's path between those dots.
         """
         lst_lat = []
         lst_long = []
 
-        format = "%Hh:%Mm:%Ss"
-        # Tracing the map only for the 28/11/2022
+        time_format = "%Hh:%Mm:%Ss"
+
+        # Plotting the map only for the 28/11/2022
         for loc in self.loc_history:
             if loc["date"] > CRIME_DAY_BEGIN and loc["date"] < CRIME_DAY_END:
-                hour = loc["date"].strftime(format)
+                hour = loc["date"].strftime(time_format)
                 plot_point(map, loc["long"], loc["lat"], hour, self.color)
                 lst_lat.append(loc["lat"])
                 lst_long.append(loc["long"])
