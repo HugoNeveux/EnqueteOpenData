@@ -47,3 +47,5 @@ python3 td10-11.py -v --show-map --show-paths
 ## Credits
 
 This program was made by Florent Cheyron (22101722, <florent.cheyron@etudiant.univ-rennes2.fr>) and Hugo Neveux (22107583, <hugo.neveux@etudiant.univ-rennes2.fr>) in december 2022.
+
+The repository for this project is stored on github at [HugoNeveux/EnqueteOpenData](https://github.com/HugoNeveux/EnqueteOpenData)
