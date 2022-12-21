@@ -16,6 +16,7 @@ SUSPECTS_COLORS = {
     "Christiane": "blue"
 }
 
+
 def api_init() -> tuple[tweepy.Client, graphh.GraphHopper]:
     """
     Uses the credentials.json file to intiialize both tweepy and graphhopper 
@@ -34,7 +35,7 @@ def api_init() -> tuple[tweepy.Client, graphh.GraphHopper]:
 
     # GraphHopper client
     client_gh = graphh.GraphHopper(api_key=data["graphhopper"])
-    
+
     return client_tw, client_gh
 
 
@@ -48,6 +49,7 @@ def import_suspects(twpclient: tweepy.Client) -> list[Suspect]:
         return [Suspect(pers["PRENOM"], pers["IDENTIFIANT_TWITTER"],
                         pers["TELEPHONE"], SUSPECTS_COLORS[pers["PRENOM"]],
                         twpclient) for pers in reader]
+
 
 def plot_map(lst_suspects: list[Suspect]):
     """
@@ -76,24 +78,22 @@ if __name__ == "__main__":
     # recuperation des localisation par le téléphone
     phone_loc_history = get_provider_data()
 
-    # permet d'innocenter jean mi et george
+    # # permet d'innocenter jean mi et george
     for person in lst_suspect:
         person.get_twitter_loc_history()
         person.get_phone_loc_history(phone_loc_history)
-        dico = person.last_known_loc()
-        temps_to_UFR(ghclient, dico, person)
+    #     dico = person.last_known_loc()
+    #     temps_to_UFR(ghclient, dico, person)
 
-    # permet d'innocenter christiane
-    for person in lst_suspect :
-        if person.is_suspect:
-            dico = person.first_known_loc()
-            temps_to_UFR(ghclient, dico, person)
+    # # permet d'innocenter christiane
+    # for person in lst_suspect:
+    #     if person.is_suspect:
+    #         dico = person.first_known_loc()
+    #         temps_to_UFR(ghclient, dico, person)
 
-    for person in lst_suspect :
-        if person.is_suspect:
-            print(f'Le meurtrier est donc : {person.name}')
-
-    
+    # for person in lst_suspect:
+    #     if person.is_suspect:
+    #         print(f'Le meurtrier est donc : {person.name}')
 
     # dessine la map
-    # plot_map(lst_suspect)
+    plot_map(lst_suspect)

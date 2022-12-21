@@ -133,6 +133,18 @@ class Suspect:
         """
         Draws the suspect's localization history on a map
         """
-        lst_lat = [loc["lat"] for loc in self.loc_history]
-        lst_long = [loc["long"] for loc in self.loc_history]
+        lst_lat = [loc["lat"] for loc in self.loc_history if loc["date"] > datetime.datetime(2022, 11, 28, 00, 00).astimezone(pytz.timezone("Europe/Paris")) and loc["date"] < datetime.datetime(2022, 11, 28, 23, 59).astimezone(pytz.timezone("Europe/Paris"))]
+        lst_long = [loc["long"] for loc in self.loc_history if loc["date"] > datetime.datetime(2022, 11, 28, 00, 00).astimezone(pytz.timezone("Europe/Paris")) and loc["date"] < datetime.datetime(2022, 11, 28, 23, 59).astimezone(pytz.timezone("Europe/Paris"))]
         tracer_ligne(map, lst_long, lst_lat, self.name, self.color)
+
+        """
+        Draw the point
+        """
+        #format = "%Hh:%Mmin"
+        for loc in self.loc_history:
+            if loc["date"] > datetime.datetime(2022, 11, 28, 00, 00).astimezone(pytz.timezone("Europe/Paris")) and loc["date"] < datetime.datetime(2022, 11, 28, 23, 59).astimezone(pytz.timezone("Europe/Paris")): 
+                heure = str(loc["date"])
+                tracer_point(map, loc["long"], loc["lat"], heure, self.color)
+
+
+# if loc["date"] > datetime.datetime(2022, 11, 28, 00) and loc["date"] < datetime.datetime(2022, 11, 28, 23, 59)
