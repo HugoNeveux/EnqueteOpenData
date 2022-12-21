@@ -1,5 +1,6 @@
 # Aurélie Lemaître 
 # 22107583 Hugo Neveux <hugo.neveux@etudiant.univ-rennes2.fr>
+# 22101722 Florent Cheyron <florent.cheyron@etudiant.univ-rennes2.fr>
 # File cartography.py, december 2022
 # File created by Aurélie Lemaitre, providing a simple interface to draw maps
 # This file was updated to avoid bokeh.tile_providers, which is deprecated
