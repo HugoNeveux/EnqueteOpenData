@@ -24,17 +24,17 @@ options:
 
 ### Ways to use this program
 
-First, running the program without any option will disculpate every suspect, and print which person is guilty.
+First, running the program without any option will disculpate every suspect, and print who is guilty...
 ```
 python3 td10-11.py
 ```
 
-Then, you can choose to display a map 
+Then, you can choose to display a map... 
 ```
 python3 td10-11.py --show-map
 ```
 
-You can also choose to print *a lot* of text by using both options designed for it
+You can also choose to print *a lot* of text by using both options designed for it...
 ```
 python3 td10-11.py -v --show-paths
 ```

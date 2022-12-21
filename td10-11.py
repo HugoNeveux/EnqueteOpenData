@@ -58,11 +58,11 @@ if __name__ == "__main__":
         
     for person in lst_suspects:
         if person.is_suspect:
-            print('=' * 74)
+            print('=' * 86)
             print("There is only one suspect remaining, so the culprit is ... " 
-                  "(rolling drum)")
+                  "(suspenseful music playing)")
             print(f"{person.name} !!!!!!")
-            print('=' * 74)
+            print('=' * 86)
 
             # Add the UFR's location to the culprit's path - because we now 
             # know he was there on 15:05...
