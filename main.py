@@ -16,7 +16,6 @@ SUSPECTS_COLORS = {
     "Christiane": "red"
 }
 
-
 def api_init() -> tuple[tweepy.Client, graphh.GraphHopper]:
     """
     Uses the credentials.json file to intiialize both tweepy and graphhopper 
@@ -70,6 +69,7 @@ if __name__ == "__main__":
     for person in lst_suspect:
         person.get_twitter_loc_history()
         person.get_phone_loc_history(phone_loc_history)
-        person.loc_history.sort(key=lambda x: x["date"])
         print(person)
+        print(person.last_known_loc())
+        print(person.first_known_loc())
     plot_map(lst_suspect)
