@@ -69,31 +69,30 @@ def get_provider_data() -> dict:
 
 
 if __name__ == "__main__":
-    # Création des clients graphh et tweepy, de la liste des suspects
+    # Initialize clients and suspects 
     twclient, ghclient = api_init()
-    lst_suspect = import_suspects(twclient)
+    lst_suspects = import_suspects(twclient)
 
-    # recuperation des localisation par le téléphone
+    # Fetch data from phone antennas
     phone_loc_history = get_provider_data()
 
-    # permet d'innocenter jean mi et george
-    for person in lst_suspect:
+    for person in lst_suspects:
+        # Build the suspect's location history
         person.get_twitter_loc_history()
         person.get_phone_loc_history(phone_loc_history)
-        dico = person.last_known_loc()
-        temps_to_UFR(ghclient, dico, person)
 
-    # permet d'innocenter christiane
-    for person in lst_suspect :
+        # First attempt to innocent the suspect, using their last known 
+        # location *before* the crime
+        innocent_suspect(ghclient, person.last_known_loc(), person)
+
+        # If it isn't sufficient, try again with their first known location
+        # *after* the crime
         if person.is_suspect:
-            dico = person.first_known_loc()
-            temps_to_UFR(ghclient, dico, person)
-
-    for person in lst_suspect :
+            innocent_suspect(ghclient, person.first_known_loc(), person)
+        
+    for person in lst_suspects :
         if person.is_suspect:
             print(f'Le meurtrier est donc : {person.name}')
-
-    
 
     # dessine la map
     # plot_map(lst_suspect)
